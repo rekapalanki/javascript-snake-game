@@ -45,29 +45,36 @@ snakeFood();
 // If snake hits canvas borders OR snake body, end game. 
 // Start function 
 
-// const move = () => {
-//     x -= MOVE_AMOUNT/16;
-//     snakeStartPoint();
-// }
+let timer = 0; // 01 declare timer
+let interval;
 
-let timer;
-
+// 02 Create start function
 const start = () => {
     x -= MOVE_AMOUNT/16;
     snakeStartPoint();
 }
 
+// 03 Create timer event handler
 function funcTimer(event) {
+    event.stopPropagation();
     if (event.type = 'click' || event.key === 'Enter') {
-        timer = setInterval(start, 15);
+        if (timer%2 == 1) {
+            clearInterval(interval);
+        } else {
+            interval = setInterval(start, 15);
+        }
+        timer++;
     }
 }
 
+// 05 Create clearInterval function and add to Stop button
 function stopTimer() {
-    clearInterval(timer);
+    clearInterval(interval);
+    timer = 0;
 }
 
-startButton.addEventListener('click', funcTimer);
+// 04 Add timer function to event listener
+startButton.addEventListener('click', funcTimer); 
 
 // chgDirection function
 
