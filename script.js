@@ -37,34 +37,36 @@ snakeStartPoint();
 snakeFood();
 
 // Write a start function
-// Write a chgDirection function
-// Make snake move and listen to arrow keys
+// Write a chgDirection function and make snake move and listen to arrow keys
 // 01 Make snake move to left AND modify var x to start between width/2 and width;
 // 02 Change direction to keystroke
 // If snake gets near (~10px) point Food, clear point Food, grow snake body, and draw new Food
 // If snake hits canvas borders OR snake body, end game. 
-// Start function 
+// !!!!!! ANOTHER GAME IDEA! Get an outline of a city map / drawing. Drop a point on the canvas and draw along the outline. Succeed: +/- 5*MOVE_AMOUNT around the outline AND lines connnected (+/- 2*MOVE_AMOUNT).
+// !!!!!! OPTIMALIZE SNAKE GAME FOR MOBILE / TABLET using sweeping moves. Write handler for sweeping movement.
 
-let timer = 0; // 01 declare timer
-let interval;
+let [timer, interval] = [0, null]; // 01 declare timer and interval
 
 // 02 Create start function
-const start = () => {
+const moveXMinus = () => {
     x -= MOVE_AMOUNT/16;
     snakeStartPoint();
 }
 
 // 03 Create timer event handler
 function funcTimer(event) {
-    event.stopPropagation();
-    if (event.type = 'click' || event.key === 'Enter') {
+    // event.stopPropagation();
+    // if (event.type = 'click' || event.key === 'Enter') {
+        console.log(timer);
         if (timer%2 == 1) {
             clearInterval(interval);
         } else {
-            interval = setInterval(start, 15);
+            interval = setInterval(moveXMinus, 15);
         }
         timer++;
-    }
+        console.log(timer);
+        console.log(interval);
+    // }
 }
 
 // 05 Create clearInterval function and add to Stop button
@@ -80,14 +82,43 @@ startButton.addEventListener('click', funcTimer);
 
 const chgDirection = (options) => {
     console.log('Change direction');
-    switch (options.key) {
-        case 'ArrowUp':
-            
-            break;
-    
-        default:
-            break;
+    clearInterval(interval);
+    timer = 0;
+    if (timer%2 == 1) {
+        clearInterval(interval);
+    } else {
+        interval = setInterval(
+        function() {
+            switch (options.key) {
+                case 'ArrowUp':
+                    y -= MOVE_AMOUNT/16;
+                    snakeStartPoint();
+                break;
+
+                case 'ArrowDown': 
+                    y += MOVE_AMOUNT/16;
+                    snakeStartPoint();
+                break;
+
+                case 'ArrowLeft':
+                    x -= MOVE_AMOUNT/16;
+                    snakeStartPoint(); 
+                break;
+
+                case 'ArrowRight': 
+                    x += MOVE_AMOUNT/16;
+                    snakeStartPoint();
+                break;
+
+                default:
+                    break;
+                }
+            },
+        15);
     }
+    timer++;
+    console.log(timer);
+    console.log(interval);
 }
 
 // Write handler for the keys
@@ -99,6 +130,9 @@ const handleKey = (event) => {
         chgDirection( { key: event.key });
     }
 }
+
+// listen for arrow keys
+window.addEventListener('keydown', handleKey);
 
 // Reset function
 
@@ -120,6 +154,3 @@ const handleReset = (event) => {
 
 // stopButton.addEventListener('click', handleStop);
 stopButton.addEventListener('click', handleReset);
-
-// listen for arrow keys
-window.addEventListener('keydown', handleKey);
